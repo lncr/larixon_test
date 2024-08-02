@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.http import Http404
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.viewsets import GenericViewSet
 
@@ -24,4 +25,4 @@ class AdvertDetailView(RetrieveModelMixin, GenericViewSet):
                 advert.save()
                 return advert
             else:
-                raise ValueError(f"Could not find Advert with pk={self.kwargs['pk']}"
+                raise Http404(f"Could not find Advert with pk={self.kwargs['pk']}"
