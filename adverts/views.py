@@ -18,7 +18,10 @@ class AdvertDetailView(RetrieveModelMixin, GenericViewSet):
 
     def get_object(self):
         with transaction.atomic():
-            advert = super().get_object()
-            advert.views += 1
-            advert.save()
-        return advert
+            advert = self.queryset.filter(pk=self.kwargs['pk']).select_for_update().first()
+            if advert:
+                advert.views += 1
+                advert.save()
+                return advert
+            else:
+                raise ValueError(f"Could not find Advert with pk={self.kwargs['pk']}"
